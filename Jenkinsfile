@@ -1,23 +1,20 @@
 pipeline {
     agent any
+    
+    // This ensures Jenkins looks for the Docker tool
+    tools {
+        dockerTool 'default' 
+    }
 
     stages {
-        stage('Build Image') {
-            steps {
-                // This builds the Docker image using the same command you used manually
+        stage('Build') {
+                steps {
                 sh 'docker build -t my-image-downloader .'
             }
         }
-        stage('Run Tests') {
-            steps {
-                // This runs your pytest inside the container to make sure the code is healthy
+        stage('Test') {
+                steps {
                 sh 'docker run --rm my-image-downloader pytest'
-            }
-        }
-        stage('Run App') {
-            steps {
-                // This runs the actual downloader
-                sh 'docker run --rm my-image-downloader'
             }
         }
     }
